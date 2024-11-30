@@ -2,13 +2,28 @@ import { useRef, useState } from "react";
 import { appBackground } from "../utils/const";
 import Header from "./Header";
 import { checkValidation } from "../utils/validate";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
+  const dispatch =useDispatch()
   let [isSignIn, setIsSignIn] = useState(true);
+  const navigate = useNavigate();
+
   const email = useRef(null);
   const fullName = useRef(null);
+
   let [errorMessage, setErrorMessage] = useState(null);
+
   let [password, setPasswordd] = useState("");
+
   const handelSignUp = () => {
     setIsSignIn(!isSignIn);
   };
@@ -16,9 +31,57 @@ const Login = () => {
     const message = checkValidation(
       email.current.value,
       password,
-      fullName.current?.value,
+      fullName.current?.value
     );
     setErrorMessage(message);
+    if (message) return;
+
+    if (!isSignIn) {
+      //Sign Up
+      createUserWithEmailAndPassword(auth, email.current.value, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          updateProfile(user, {
+            displayName: fullName.current?.value,
+            photoURL:
+              "https://i.natgeofe.com/n/4f5aaece-3300-41a4-b2a8-ed2708a0a27c/domestic-dog_thumb_square.jpg",
+          })
+            .then(() => {
+              const { uid, email, displayName, photoURL } = auth.currentUser;
+              dispatch(
+                addUser({
+                  uid: uid,
+                  email: email,
+                  dsiplayName: displayName,
+                  photoURL: photoURL,
+                })
+              );
+              navigate("/browse");
+            })
+            .catch((error) => {
+              // An error occurred
+              // ...
+            });
+          
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + "-" + errorMessage);
+        });
+    } else {
+      // Signed In
+      signInWithEmailAndPassword(auth, email.current.value, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          navigate("/browse");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + "-" + errorMessage);
+        });
+    }
   };
   return (
     <div>
