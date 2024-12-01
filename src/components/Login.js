@@ -8,14 +8,13 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
-import { useNavigate } from "react-router-dom";
+import { userIcon } from "../utils/const";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 
 const Login = () => {
   const dispatch =useDispatch()
   let [isSignIn, setIsSignIn] = useState(true);
-  const navigate = useNavigate();
 
   const email = useRef(null);
   const fullName = useRef(null);
@@ -43,8 +42,7 @@ const Login = () => {
           const user = userCredential.user;
           updateProfile(user, {
             displayName: fullName.current?.value,
-            photoURL:
-              "https://i.natgeofe.com/n/4f5aaece-3300-41a4-b2a8-ed2708a0a27c/domestic-dog_thumb_square.jpg",
+            photoURL: userIcon,
           })
             .then(() => {
               const { uid, email, displayName, photoURL } = auth.currentUser;
@@ -56,12 +54,8 @@ const Login = () => {
                   photoURL: photoURL,
                 })
               );
-              navigate("/browse");
             })
-            .catch((error) => {
-              // An error occurred
-              // ...
-            });
+            .catch((error) => {});
           
         })
         .catch((error) => {
@@ -74,7 +68,6 @@ const Login = () => {
       signInWithEmailAndPassword(auth, email.current.value, password)
         .then((userCredential) => {
           const user = userCredential.user;
-          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -84,16 +77,23 @@ const Login = () => {
     }
   };
   return (
-    <div>
+    <div className="relative min-h-screen">
       <Header />
-      <div className="absolute ">
-        <img className="" src={appBackground} />
+
+
+      <div className="absolute inset-0">
+        <img
+          className="w-full h-full object-cover"
+          src={appBackground}
+          alt="Background"
+        />
       </div>
+
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="absolute p-12 w-3/12 bg-black my-36 text-white mx-auto right-0 left-0 opacity-80 rounded-xl"
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-80 p-8 sm:p-10 md:p-12 w-11/12 sm:w-8/12 md:w-5/12 lg:w-3/12 text-white rounded-xl shadow-lg"
       >
-        <h1 className="font-bold text-3xl">
+        <h1 className="font-bold text-2xl sm:text-3xl mb-6">
           {isSignIn ? "Sign In" : "Sign Up"}
         </h1>
 
@@ -102,32 +102,42 @@ const Login = () => {
             ref={fullName}
             type="text"
             placeholder="Full Name"
-            className="p-4 my-4 w-full bg-gray-800 rounded-xl"
-          ></input>
+            className="p-3 sm:p-4 mb-4 w-full bg-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600"
+          />
         )}
+
         <input
           ref={email}
           type="text"
           placeholder="Email or Phone number"
-          className="p-4 my-4 w-full bg-gray-800 rounded-xl"
-        ></input>
+          className="p-3 sm:p-4 mb-4 w-full bg-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600"
+        />
+
         <input
-          // ref={password}
           value={password}
           onChange={(e) => setPasswordd(e.target.value)}
           type="password"
           placeholder="Enter Your Password"
-          className="p-4 my-4 w-full  bg-gray-800 rounded-xl"
-        ></input>
-        <p className="text-red-600 font-bold text-lg py-2">{errorMessage}</p>
+          className="p-3 sm:p-4 mb-4 w-full bg-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-600"
+        />
+
+        <p className="text-red-600 font-bold text-sm sm:text-lg py-2">
+          {errorMessage}
+        </p>
+
+
         <button
-          className="p-4 my-6 bg-red-700 w-full rounded-xl"
+          className="p-3 sm:p-4 my-4 bg-red-700 w-full rounded-xl font-semibold hover:bg-red-600 transition-all"
           onClick={handelButtonClick}
         >
           {isSignIn ? "Sign In" : "Sign Up"}
         </button>
-        <p className="p-4  cursor-pointer" onClick={handelSignUp}>
-          New To Netflix? Create account to Sign Up
+
+        <p
+          className="text-center text-sm sm:text-base cursor-pointer hover:underline"
+          onClick={handelSignUp}
+        >
+          New to Netflix? Create an account to Sign Up
         </p>
       </form>
     </div>
