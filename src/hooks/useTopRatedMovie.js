@@ -1,8 +1,9 @@
 import { API_OPTIONS } from "../utils/const";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addTopRatedgMovies } from "../utils/movieSlice";
 import React, { useEffect } from "react";
 const useTopRatedMovie = () => {
+  const topRatedMovies = useSelector((store) => store.movies.topRatedMovies);
   const dispatch = useDispatch();
   const getTopRatedMovies = async () => {
     const data = await fetch(
@@ -14,7 +15,7 @@ const useTopRatedMovie = () => {
   };
 
   useEffect(() => {
-    getTopRatedMovies();
+    !topRatedMovies && getTopRatedMovies();
   }, []);
 };
 export default useTopRatedMovie;

@@ -4,11 +4,12 @@ import VideoTitle from "./VideoTitle";
 import VideoBackground from "./VideoBackground";
 
 const PrimaryContainer = () => {
-  const movies = useSelector((store) => store.movies?.nowPlayingMovies);
+  const movies = useSelector((store) => store.movies?.upComingMovies);
 
   if(!movies) return;
 
-  const mainMovie = movies[0];
+    const RandomIndex = Math.floor(Math.random()*10)
+  const mainMovie = movies[RandomIndex];
     const{original_title ,overview,id} = mainMovie
 
   return (

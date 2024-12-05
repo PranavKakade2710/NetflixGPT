@@ -10,7 +10,19 @@ export const API_OPTIONS = {
   headers: {
     accept: "application/json",
     Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NTc4ZjZmMzUxZGQxMTljMjBjOTExZjU1OTczODM1YyIsIm5iZiI6MTczMzAzMzEzNC44MTQwMDAxLCJzdWIiOiI2NzRiZmNhZWExMDc2ODQxYTYwMTg1ZmMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.Sa3X1L2pQeIfKz1usNz8XPFq08Lhc2eb7nsoMZIHu1c",
+      "Bearer Enter Your API KEY",
   },
 };
 export const IMG_POSTER = "https://image.tmdb.org/t/p/w500";
+
+export const SUPPORTED_LANGAUAGES = [
+  { identifire: "en", name: "English" },
+  { identifire: "marathi", name: "Marathi" },
+  { identifire: "spanish", name: "Spanish" },
+];
+
+export const OPEN_AI_KEY = "";
+export const GEMINI_KEY = "Enter Your API Key";
+// export const GEMINI_KEY = process.env.REACT_APP_GEMINI_KEY;
+
+

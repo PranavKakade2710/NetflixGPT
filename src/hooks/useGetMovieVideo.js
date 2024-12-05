@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addNowPlayingTrailer } from "../utils/movieSlice";
 
 const useGetMovieVideo = (movieId) => {
+
   const dispatch = useDispatch();
   const getMovieVideo = async () => {
     const data = await fetch(
